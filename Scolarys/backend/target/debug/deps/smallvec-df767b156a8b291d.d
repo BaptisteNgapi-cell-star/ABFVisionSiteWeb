@@ -1,0 +1,7 @@
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\smallvec-df767b156a8b291d.d: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\smallvec-1.15.1\src\lib.rs
+
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\libsmallvec-df767b156a8b291d.rlib: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\smallvec-1.15.1\src\lib.rs
+
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\libsmallvec-df767b156a8b291d.rmeta: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\smallvec-1.15.1\src\lib.rs
+
+C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\smallvec-1.15.1\src\lib.rs:

@@ -1,5 +1,5 @@
 // pages/LicensePortal.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import {
   FiKey, FiCopy, FiDownload, FiRefreshCw, FiX,
@@ -8,37 +8,8 @@ import {
   FiHash, FiCpu, FiZap, FiCalendar, FiLock,
   FiDatabase, FiHardDrive, FiFileText, FiInfo
 } from 'react-icons/fi';
+import type { License, Toast, LicenseStatus, LicensePlan, Language, TabId } from '../types';
 
-// ─── TYPES ─────────────────────────────────────────────────────────────────────
-type Language = 'fr' | 'en';
-type TabId = 'overview' | 'details' | 'download' | 'support' | 'history';
-type LicenseStatus = 'active' | 'expired' | 'pending' | 'suspended' | 'gracePeriod';
-type LicensePlan = 'BASIC' | 'PRO' | 'ENTERPRISE' | 'PREMIUM';
-
-interface License {
-  id: string;
-  licenseKey: string;
-  institutionName: string;
-  plan: LicensePlan;
-  status: LicenseStatus;
-  schoolId: string;
-  issuedDate: string;
-  expiryDate: string;
-  maxVersion: string;
-  currentVersion: string;
-  installations: number;
-  maxInstallations: number;
-  lastActivated: string;
-  features: string[];
-}
-
-interface Toast {
-  id: string;
-  message: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-}
-
-// ─── TRANSLATIONS ──────────────────────────────────────────────────────────────
 const T = {
   fr: {
     eyebrow: 'Portail de licence',
@@ -46,11 +17,11 @@ const T = {
     headline2: 'Scolarys.',
     subtitle: 'Gérez, téléchargez et activez votre licence d\'établissement en toute sécurité.',
     tabs: {
-      overview:  'Vue d\'ensemble',
-      details:   'Détails',
-      download:  'Récupérer',
-      support:   'Support',
-      history:   'Historique',
+      overview: 'Vue d\'ensemble',
+      details: 'Détails',
+      download: 'Récupérer',
+      support: 'Support',
+      history: 'Historique',
     },
     status: { active: 'Active', expired: 'Expirée', pending: 'En attente', suspended: 'Suspendue', gracePeriod: 'Grâce' },
     planLabel: 'Forfait',
@@ -73,14 +44,14 @@ const T = {
     dlSubtitle: 'Choisissez le format adapté à votre établissement',
     dlFormats: {
       online: 'Activation en ligne',
-      file:   'Fichier de licence',
-      usb:    'Clé USB sécurisée',
+      file: 'Fichier de licence',
+      usb: 'Clé USB sécurisée',
       manual: 'Documentation',
     },
     dlDesc: {
       online: 'Activation instantanée via notre serveur sécurisé',
-      file:   'Fichier .licpkg chiffré pour installation hors ligne',
-      usb:    'Générez une clé USB d\'activation sécurisée',
+      file: 'Fichier .licpkg chiffré pour installation hors ligne',
+      usb: 'Générez une clé USB d\'activation sécurisée',
       manual: 'Guide complet d\'installation et d\'activation',
     },
     dlRecommended: 'Recommandé',
@@ -111,11 +82,11 @@ const T = {
     headline2: 'license.',
     subtitle: 'Manage, download and activate your institution license securely.',
     tabs: {
-      overview:  'Overview',
-      details:   'Details',
-      download:  'Retrieve',
-      support:   'Support',
-      history:   'History',
+      overview: 'Overview',
+      details: 'Details',
+      download: 'Retrieve',
+      support: 'Support',
+      history: 'History',
     },
     status: { active: 'Active', expired: 'Expired', pending: 'Pending', suspended: 'Suspended', gracePeriod: 'Grace' },
     planLabel: 'Plan',
@@ -138,14 +109,14 @@ const T = {
     dlSubtitle: 'Choose the format suitable for your institution',
     dlFormats: {
       online: 'Online Activation',
-      file:   'License File',
-      usb:    'Secure USB Key',
+      file: 'License File',
+      usb: 'Secure USB Key',
       manual: 'Documentation',
     },
     dlDesc: {
       online: 'Instant activation via our secure server',
-      file:   'Encrypted .licpkg file for offline installation',
-      usb:    'Generate a secure USB activation key',
+      file: 'Encrypted .licpkg file for offline installation',
+      usb: 'Generate a secure USB activation key',
       manual: 'Complete installation and activation guide',
     },
     dlRecommended: 'Recommended',
@@ -217,10 +188,10 @@ const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 // Status config
 const STATUS_CFG: Record<LicenseStatus, { color: string; bg: string; border: string; dot: string }> = {
-  active:      { color: '#34D399', bg: 'rgba(52,211,153,0.08)',  border: 'rgba(52,211,153,0.2)',  dot: '#34D399' },
-  expired:     { color: '#F87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.2)', dot: '#F87171' },
-  pending:     { color: '#F59E0B', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.2)',  dot: '#F59E0B' },
-  suspended:   { color: '#98A2B3', bg: 'rgba(152,162,179,0.08)', border: 'rgba(152,162,179,0.2)', dot: '#98A2B3' },
+  active: { color: '#34D399', bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.2)', dot: '#34D399' },
+  expired: { color: '#F87171', bg: 'rgba(248,113,113,0.08)', border: 'rgba(248,113,113,0.2)', dot: '#F87171' },
+  pending: { color: '#F59E0B', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', dot: '#F59E0B' },
+  suspended: { color: '#98A2B3', bg: 'rgba(152,162,179,0.08)', border: 'rgba(152,162,179,0.2)', dot: '#98A2B3' },
   gracePeriod: { color: '#C084FC', bg: 'rgba(192,132,252,0.08)', border: 'rgba(192,132,252,0.2)', dot: '#C084FC' },
 };
 
@@ -246,7 +217,7 @@ const ToastBar: React.FC<{ toast: Toast | null; onClose: () => void }> = ({ toas
     if (!toast) return;
     const t = setTimeout(onClose, 3500);
     return () => clearTimeout(t);
-  }, [toast]);
+  }, [toast, onClose]);
 
   const colors: Record<string, string> = {
     success: '#34D399', error: '#F87171', info: '#9AAEFF', warning: '#F59E0B',
@@ -278,10 +249,10 @@ const DownloadModal: React.FC<{
   const t = T[language];
 
   const OPTIONS = [
-    { id: 'online' as const, icon: FiGlobe,    accent: '#34D399', recommended: true },
-    { id: 'file'   as const, icon: FiFileText,  accent: '#9AAEFF' },
-    { id: 'usb'    as const, icon: FiHardDrive, accent: '#C084FC' },
-    { id: 'manual' as const, icon: FiDatabase,  accent: '#F59E0B' },
+    { id: 'online' as const, icon: FiGlobe, accent: '#34D399', recommended: true },
+    { id: 'file' as const, icon: FiFileText, accent: '#9AAEFF' },
+    { id: 'usb' as const, icon: FiHardDrive, accent: '#C084FC' },
+    { id: 'manual' as const, icon: FiDatabase, accent: '#F59E0B' },
   ];
 
   return (
@@ -370,10 +341,10 @@ const MetaTile: React.FC<{ icon: React.ElementType; label: string; value: string
 // ─── TABS ────────────────────────────────────────────────────────────────────────
 const TABS: { id: TabId; icon: React.ElementType }[] = [
   { id: 'overview', icon: FiZap },
-  { id: 'details',  icon: FiKey },
+  { id: 'details', icon: FiKey },
   { id: 'download', icon: FiDownload },
-  { id: 'support',  icon: FiMail },
-  { id: 'history',  icon: FiClock },
+  { id: 'support', icon: FiMail },
+  { id: 'history', icon: FiClock },
 ];
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────────
@@ -388,9 +359,9 @@ const LicensePortal: React.FC = () => {
 
   const t = T[language];
 
-  const showToast = (message: string, type: Toast['type'] = 'success') => {
+  const showToast = useCallback((message: string, type: Toast['type'] = 'success') => {
     setToast({ id: Date.now().toString(), message, type });
-  };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -400,17 +371,22 @@ const LicensePortal: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCopyKey = () => {
+  const handleCopyKey = useCallback(() => {
     if (!license) return;
-    navigator.clipboard.writeText(license.licenseKey).catch(() => {});
+    navigator.clipboard.writeText(license.licenseKey).catch(() => { });
     setKeyCopied(true);
     showToast(t.copied);
     setTimeout(() => setKeyCopied(false), 2000);
-  };
+  }, [license, showToast, t.copied]);
 
-  const handleDownload = (format: 'online' | 'file' | 'usb') => {
+  const handleDownload = useCallback((format: 'online' | 'file' | 'usb') => {
     if (!license) return;
-    const blob = new Blob([JSON.stringify({ licenseKey: license.licenseKey, institution: license.institutionName, plan: license.plan, expiryDate: license.expiryDate }, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({
+      licenseKey: license.licenseKey,
+      institution: license.institutionName,
+      plan: license.plan,
+      expiryDate: license.expiryDate
+    }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -418,11 +394,15 @@ const LicensePortal: React.FC = () => {
     a.click();
     URL.revokeObjectURL(url);
     showToast(t.downloaded);
-  };
+  }, [license, showToast, t.downloaded]);
 
-  const daysRemaining = license
-    ? Math.ceil((new Date(license.expiryDate).getTime() - Date.now()) / 86400000)
-    : 0;
+  // Correction: Utilisation de useMemo pour éviter Date.now() pendant le render
+  const daysRemaining = React.useMemo(() => {
+    if (!license) return 0;
+    const expiry = new Date(license.expiryDate);
+    const now = new Date();
+    return Math.ceil((expiry.getTime() - now.getTime()) / 86400000);
+  }, [license]);
 
   const usagePct = license ? (license.installations / license.maxInstallations) * 100 : 0;
 
@@ -464,7 +444,7 @@ const LicensePortal: React.FC = () => {
             style={{ background: 'radial-gradient(circle, rgba(154,174,255,0.05) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
           <svg className="absolute inset-0 w-full h-full opacity-[0.022]">
             <defs><pattern id="lpg" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
             </pattern></defs>
             <rect width="100%" height="100%" fill="url(#lpg)" />
           </svg>
@@ -617,12 +597,12 @@ const LicensePortal: React.FC = () => {
               {/* KPI grid */}
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden mb-7">
                 {[
-                  { icon: FiHash,     label: t.schoolIdLabel,   value: license.schoolId,          accent: '#9AAEFF' },
-                  { icon: FiCalendar, label: t.issuedLabel,      value: new Date(license.issuedDate).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: '#9AAEFF' },
-                  { icon: FiCalendar, label: t.expiryLabel,      value: new Date(license.expiryDate).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: daysRemaining < 30 ? '#F59E0B' : '#34D399' },
-                  { icon: FiCpu,      label: t.versionLabel,     value: license.maxVersion,         accent: '#C084FC' },
-                  { icon: FiZap,      label: t.installLabel,     value: `${license.installations} / ${license.maxInstallations}`, accent: usagePct > 80 ? '#F87171' : '#34D399' },
-                  { icon: FiClock,    label: t.lastActLabel,     value: new Date(license.lastActivated).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: '#9AAEFF' },
+                  { icon: FiHash, label: t.schoolIdLabel, value: license.schoolId, accent: '#9AAEFF' },
+                  { icon: FiCalendar, label: t.issuedLabel, value: new Date(license.issuedDate).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: '#9AAEFF' },
+                  { icon: FiCalendar, label: t.expiryLabel, value: new Date(license.expiryDate).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: daysRemaining < 30 ? '#F59E0B' : '#34D399' },
+                  { icon: FiCpu, label: t.versionLabel, value: license.maxVersion, accent: '#C084FC' },
+                  { icon: FiZap, label: t.installLabel, value: `${license.installations} / ${license.maxInstallations}`, accent: usagePct > 80 ? '#F87171' : '#34D399' },
+                  { icon: FiClock, label: t.lastActLabel, value: new Date(license.lastActivated).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US'), accent: '#9AAEFF' },
                 ].map((item, i) => (
                   <Reveal key={i} delay={0.04 * i}>
                     <div className="bg-[#1A1F2E] px-6 py-5">
@@ -707,9 +687,9 @@ const LicensePortal: React.FC = () => {
               {/* Meta tiles */}
               <Reveal delay={0.14}>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-5">
-                  <MetaTile icon={FiZap}      label={t.planLabel}    value={license.plan} accent={PLAN_CFG[license.plan]} />
-                  <MetaTile icon={FiCpu}      label={t.versionLabel} value={license.maxVersion} />
-                  <MetaTile icon={FiHash}     label={t.schoolIdLabel} value={license.schoolId} />
+                  <MetaTile icon={FiZap} label={t.planLabel} value={license.plan} accent={PLAN_CFG[license.plan]} />
+                  <MetaTile icon={FiCpu} label={t.versionLabel} value={license.maxVersion} />
+                  <MetaTile icon={FiHash} label={t.schoolIdLabel} value={license.schoolId} />
                 </div>
               </Reveal>
             </motion.div>
@@ -725,9 +705,9 @@ const LicensePortal: React.FC = () => {
                 <div className="lg:col-span-7 flex flex-col gap-3">
                   {(['online', 'file', 'usb', 'manual'] as const).map((fmt, i) => {
                     const ACCENTS = { online: '#34D399', file: '#9AAEFF', usb: '#C084FC', manual: '#F59E0B' };
-                    const ICONS   = { online: FiGlobe, file: FiFileText, usb: FiHardDrive, manual: FiDatabase };
-                    const accent  = ACCENTS[fmt];
-                    const Icon    = ICONS[fmt];
+                    const ICONS = { online: FiGlobe, file: FiFileText, usb: FiHardDrive, manual: FiDatabase };
+                    const accent = ACCENTS[fmt];
+                    const Icon = ICONS[fmt];
                     return (
                       <Reveal key={fmt} delay={0.05 * i}>
                         <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.99 }}
@@ -866,7 +846,7 @@ const LicensePortal: React.FC = () => {
                             <div className="flex flex-col items-center mt-1">
                               <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.dot }} />
                               {i < HISTORY.length - 1 && (
-                                <div className="w-px flex-1 mt-2 mb-[-20px]" style={{ background: 'rgba(255,255,255,0.05)', minHeight: 24 }} />
+                                <div className="w-px flex-1 mt-2 -mb-5" style={{ background: 'rgba(255,255,255,0.05)', minHeight: 24 }} />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">

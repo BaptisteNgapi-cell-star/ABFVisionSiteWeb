@@ -2,9 +2,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import {
-  FiCpu, FiCode, FiDownload, FiShield, FiFileText,
-  FiGlobe, FiTerminal, FiZap, FiUsers, FiBook,
-  FiCloud, FiBarChart2, FiArrowRight, FiCheck
+FiCode, FiDownload, FiShield, FiFileText,
+FiTerminal,  FiBook,
+ FiBarChart2, FiArrowRight, FiCheck
 } from 'react-icons/fi';
 
 // ─── TRANSLATIONS ──────────────────────────────────────────────────────────────
@@ -429,7 +429,7 @@ const AlgorithmsSection: React.FC<{ language: 'fr' | 'en' }> = ({ language }) =>
           <Reveal delay={0.4}>
             <div className="grid grid-cols-5 gap-px mt-20 border border-white/5 rounded-xl overflow-hidden">
               {t.stats.map((s, i) => (
-                <div key={i} className="bg-white/[0.02] px-4 py-5 text-center hover:bg-white/[0.04] transition-colors">
+                <div key={i} className="bg-white/2 px-4 py-5 text-center hover:bg-white/4 transition-colors">
                   <div className="text-2xl sm:text-3xl font-extralight text-white mb-1">{s.value}</div>
                   <div className="text-[10px] text-[#484f68] font-light uppercase tracking-widest">{s.label}</div>
                 </div>
@@ -558,12 +558,5 @@ const AlgorithmsSection: React.FC<{ language: 'fr' | 'en' }> = ({ language }) =>
   );
 };
 
-
-const FiCoffee = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M2 6h2v12h12v2h-12c-1.1 0-2-.9-2-2v-12zm2 2v8h8v-8h-8z" />
-    <path d="M18 6h-2v2h2v2h-2v2h2v2h-2v2h2v2h-2v2h2v2h-6v2h10v-12c0-2.21-1.79-4-4-4z" />
-  </svg>
-);
 
 export default AlgorithmsSection;

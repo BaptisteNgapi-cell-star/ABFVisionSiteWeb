@@ -1,27 +1,29 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Homepage from "./pages/Accueil"; 
-import LicencePortal from "./pages/LicenceActivate"
+import AuthPage from "./pages/AuthPage";
+import Homepage from "./pages/Accueil";
+import LicencePortal from "./pages/LicenceActivate";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
 
-        <Route path="/" element={<Homepage />} />
+        <Route path="/"              element={<AuthPage />} />
+        <Route path="/accueil"       element={<Homepage />} />
         <Route path="/LicencePortal" element={<LicencePortal />} />
-
 
         <Route
           path="*"
           element={
-            <div className="flex items-center justify-center min-h-screen">
-              <div className="text-center">
-                <p className="text-gray-600">Page non trouvée</p>
-              </div>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"#0d1018" }}>
+              <p style={{ color:"rgba(255,255,255,0.3)", fontFamily:"'IBM Plex Mono', monospace", fontSize:13 }}>
+                Page non trouvée
+              </p>
             </div>
           }
         />
+
       </Routes>
     </Router>
   );

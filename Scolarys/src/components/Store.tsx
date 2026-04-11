@@ -1,10 +1,10 @@
 // components/StoreSection.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import {
-  FiDownload, FiSmartphone, FiMonitor, FiBook,
+  FiDownload, FiMonitor, FiBook,
   FiUsers, FiAward, FiX, FiArrowRight,
-  FiCheck, FiStar, FiChevronLeft, FiChevronRight
+  FiCheck, FiStar, FiUserPlus
 } from 'react-icons/fi';
 
 // ─── TRANSLATIONS ──────────────────────────────────────────────────────────────
@@ -67,7 +67,7 @@ const T = {
 const PRODUCTS = [
   {
     id: 1, num: '01', category: 'software',
-    name: 'ABFVision',
+    name: 'Scolarys',
     badge: { fr: 'Premium', en: 'Premium' },
     accent: '#9AAEFF',
     icon: FiMonitor,
@@ -88,7 +88,7 @@ const PRODUCTS = [
   },
   {
     id: 2, num: '02', category: 'mobile',
-    name: 'ABFVision Parent',
+    name: 'Scolarys Parents',
     badge: { fr: 'Gratuit', en: 'Free' },
     accent: '#F59E0B',
     icon: FiUsers,
@@ -109,7 +109,7 @@ const PRODUCTS = [
   },
   {
     id: 3, num: '03', category: 'mobile',
-    name: 'ABFVision Étudiant',
+    name: 'Scolarys Étudiant',
     badge: { fr: 'Gratuit', en: 'Free' },
     accent: '#34D399',
     icon: FiBook,
@@ -130,7 +130,7 @@ const PRODUCTS = [
   },
   {
     id: 4, num: '04', category: 'mobile',
-    name: 'ExamLibrary',
+    name: 'ExaLab',
     badge: { fr: 'Nouveau', en: 'New' },
     accent: '#C084FC',
     icon: FiAward,
@@ -147,6 +147,27 @@ const PRODUCTS = [
     versions: [
       { ver: 'v1.2.0', size: '35 MB', req: 'Android 8.0+ / iOS 13+' },
       { ver: 'v1.1.5', size: '32 MB', req: 'Android 8.0+ / iOS 13+' },
+    ],
+  },
+  {
+    id: 5, num: '05', category: 'mobile',
+    name: 'Elite',
+    badge: { fr: 'Recrutement', en: 'Recruitment' },
+    accent: '#F87171',
+    icon: FiUserPlus,
+    platform: 'Android / iOS',
+    rating: 4.9, downloads: '5K+',
+    desc: {
+      fr: 'Plateforme de recrutement qui connecte les meilleurs professeurs aux établissements. Chaque professeur a un nombre d\'étoiles basé sur ses performances.',
+      en: 'Recruitment platform connecting the best teachers with institutions. Each teacher has a star rating based on their performance.',
+    },
+    features: {
+      fr: ['Profil enseignant avec étoiles', 'Mise en relation avec établissements', 'Visibilité accrue', 'Statistiques de performance', 'Recommandations personnalisées'],
+      en: ['Teacher profile with stars', 'Connection with institutions', 'Increased visibility', 'Performance statistics', 'Personalized recommendations'],
+    },
+    versions: [
+      { ver: 'v1.0.0', size: '42 MB', req: 'Android 8.0+ / iOS 13+' },
+      { ver: 'v0.9.5', size: '40 MB', req: 'Android 8.0+ / iOS 13+' },
     ],
   },
 ];
@@ -253,7 +274,7 @@ const ProductRow: React.FC<{
         whileHover={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
 
         {/* Active accent bar */}
-        <motion.div className="absolute left-0 top-0 bottom-0 w-[2px] rounded-full"
+        <motion.div className="absolute left-0 top-0 bottom-0 w-0.5"
           style={{ background: product.accent }}
           animate={{ opacity: isActive ? 1 : 0, scaleY: isActive ? 1 : 0 }}
           transition={{ duration: 0.2 }} />
@@ -323,7 +344,7 @@ const ProductDetail: React.FC<{
       style={{ background: `${product.accent}05` }}>
 
       {/* Top accent */}
-      <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, ${product.accent}, transparent)` }} />
+      <div className="h-0.5 w-full" style={{ background: `linear-gradient(90deg, ${product.accent}, transparent)` }} />
 
       <div className="p-8">
         {/* Header */}
@@ -404,13 +425,20 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
   const [activeProduct, setActiveProduct] = useState<Product>(PRODUCTS[0]);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const filtered = PRODUCTS.filter(p => activeCategory === 'all' || p.category === activeCategory);
+  const filtered = useMemo(() => 
+    PRODUCTS.filter(p => activeCategory === 'all' || p.category === activeCategory),
+    [activeCategory]
+  );
 
-  useEffect(() => {
-    if (!filtered.find(p => p.id === activeProduct.id)) {
-      setActiveProduct(filtered[0]);
+  // CORRECTION: Utilisation d'une fonction pour déterminer le produit valide
+  const getValidProduct = useCallback(() => {
+    if (filtered.some(p => p.id === activeProduct.id)) {
+      return activeProduct;
     }
-  }, [activeCategory]);
+    return filtered[0] || PRODUCTS[0];
+  }, [filtered, activeProduct]);
+
+  const currentProduct = getValidProduct();
 
   const categories = [
     { id: 'all',      label: t.catAll },
@@ -428,7 +456,7 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
             style={{ background: 'radial-gradient(circle, rgba(154,174,255,0.05) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
           <svg className="absolute inset-0 w-full h-full opacity-[0.025]" xmlns="http://www.w3.org/2000/svg">
             <defs><pattern id="sg" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
             </pattern></defs>
             <rect width="100%" height="100%" fill="url(#sg)" />
           </svg>
@@ -454,11 +482,11 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
               {/* Stats mini */}
               <div className="grid grid-cols-3 gap-px border border-white/5 rounded-xl overflow-hidden">
                 {[
-                  { val: '4', lbl: language === 'fr' ? 'Produits' : 'Products' },
-                  { val: '58K+', lbl: language === 'fr' ? 'Utilisateurs' : 'Users' },
+                  { val: '5', lbl: language === 'fr' ? 'Produits' : 'Products' },
+                  { val: '63K+', lbl: language === 'fr' ? 'Utilisateurs' : 'Users' },
                   { val: '4.7★', lbl: language === 'fr' ? 'Note moy.' : 'Avg. rating' },
                 ].map((s, i) => (
-                  <div key={i} className="bg-white/[0.02] px-4 py-4 text-center">
+                  <div key={i} className="bg-white/2 px-4 py-4 text-center">
                     <div className="text-xl font-extralight text-white">{s.val}</div>
                     <div className="text-[10px] text-[#484f68] uppercase tracking-widest font-light">{s.lbl}</div>
                   </div>
@@ -483,7 +511,7 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
                 </h2>
               </div>
               {/* Category pills */}
-              <div className="flex items-center gap-1 p-1 rounded-xl border border-white/5 bg-white/[0.01] self-start sm:self-auto">
+              <div className="flex items-center gap-1 p-1 rounded-xl border border-white/5 bg-white/1 self-start sm:self-auto">
                 {categories.map(cat => (
                   <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
                     className="px-4 py-2 rounded-lg text-xs font-light tracking-wide transition-all duration-200"
@@ -504,7 +532,7 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
             <div className="lg:col-span-7 flex flex-col gap-3">
               <AnimatePresence mode="popLayout">
                 {filtered.map((p, i) => (
-                  <ProductRow key={p.id} product={p} isActive={activeProduct.id === p.id}
+                  <ProductRow key={p.id} product={p} isActive={currentProduct.id === p.id}
                     onClick={() => setActiveProduct(p)} language={language} delay={0.05 * i} />
                 ))}
               </AnimatePresence>
@@ -513,7 +541,7 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
             {/* Detail panel */}
             <div className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
               <AnimatePresence mode="wait">
-                <ProductDetail key={activeProduct.id} product={activeProduct} language={language}
+                <ProductDetail key={currentProduct.id} product={currentProduct} language={language}
                   onDownload={() => setModalOpen(true)} />
               </AnimatePresence>
             </div>
@@ -604,7 +632,7 @@ const StoreSection: React.FC<{ language: 'fr' | 'en'; onNavigate?: (s: string) =
       </section>
 
       {/* Modal */}
-      <DownloadModal product={activeProduct} isOpen={modalOpen} onClose={() => setModalOpen(false)} language={language} />
+      <DownloadModal product={currentProduct} isOpen={modalOpen} onClose={() => setModalOpen(false)} language={language} />
     </div>
   );
 };

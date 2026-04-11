@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import {
   FiDownload, FiSearch, FiX, FiArrowRight,
   FiGrid, FiList, FiFilter, FiCheck, FiEye,
-  FiStar, FiFileText, FiBook, FiUsers, FiLayout,
+  FiStar, FiBook, FiUsers, FiLayout,
   FiClipboard, FiCalendar, FiBarChart2, FiMail
 } from 'react-icons/fi';
 
@@ -199,7 +199,7 @@ const PreviewModal: React.FC<{
             onClick={e => e.stopPropagation()}>
 
             {/* Accent top bar */}
-            <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${template.accent}, transparent)` }} />
+            <div className="h-0.5" style={{ background: `linear-gradient(90deg, ${template.accent}, transparent)` }} />
 
             <div className="p-8">
               {/* Header */}
@@ -295,7 +295,7 @@ const TemplateCard: React.FC<{
         borderColor: selected ? template.accent : hovered ? `${template.accent}30` : 'rgba(255,255,255,0.06)',
       }}>
       {/* Top accent */}
-      <motion.div className="absolute top-0 left-0 right-0 h-[1px]"
+      <motion.div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: template.accent }}
         animate={{ opacity: hovered || selected ? 1 : 0, scaleX: hovered || selected ? 1 : 0 }}
         transition={{ duration: 0.25 }} />
@@ -380,7 +380,7 @@ const TemplateRow: React.FC<{
         borderColor: selected ? `${template.accent}40` : 'rgba(255,255,255,0.06)',
       }}
       whileHover={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
-      <motion.div className="absolute left-0 top-0 bottom-0 w-[2px] rounded-r-full"
+      <motion.div className="absolute left-0 top-0 bottom-0 w-0.5 rounded-r-full"
         style={{ background: template.accent }}
         animate={{ opacity: selected ? 1 : 0 }} transition={{ duration: 0.2 }} />
 
@@ -447,6 +447,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [downloading, setDownloading] = useState<string | null>(null);
 
   const filtered = useMemo(() => TEMPLATES
@@ -481,7 +482,10 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
     const content = `Template: ${template.name[language]}\nCategory: ${template.category}\nSize: ${template.size}\nDownloaded: ${new Date().toLocaleDateString()}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    Object.assign(document.createElement('a'), { href: url, download: `abfvision-${template.id}.txt` }).click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nova-template-${template.id}.txt`;
+    a.click();
     URL.revokeObjectURL(url);
     setDownloading(null);
   };
@@ -491,7 +495,10 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
     const content = sel.map(t => `• ${t.name[language]} (${t.type}, ${t.size})`).join('\n');
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    Object.assign(document.createElement('a'), { href: url, download: `abfvision-bulk.txt` }).click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nova-templates-bulk.txt`;
+    a.click();
     URL.revokeObjectURL(url);
     setSelected([]);
   };
@@ -509,7 +516,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
             style={{ background: 'radial-gradient(circle, rgba(154,174,255,0.05) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
           <svg className="absolute inset-0 w-full h-full opacity-[0.025]" xmlns="http://www.w3.org/2000/svg">
             <defs><pattern id="tg" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
             </pattern></defs>
             <rect width="100%" height="100%" fill="url(#tg)" />
           </svg>
@@ -539,7 +546,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
                   { val: totalDownloads, lbl: language === 'fr' ? 'Téléchargements' : 'Downloads' },
                   { val: '4.7★', lbl: language === 'fr' ? 'Note moy.' : 'Avg. rating' },
                 ].map((s, i) => (
-                  <div key={i} className="bg-white/[0.02] px-4 py-4 text-center">
+                  <div key={i} className="bg-white/2 px-4 py-4 text-center">
                     <div className="text-xl font-extralight text-white">{s.val}</div>
                     <div className="text-[10px] text-[#484f68] uppercase tracking-widest font-light">{s.lbl}</div>
                   </div>
@@ -570,7 +577,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
                 <div className="relative">
                   <FiSearch size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25" />
                   <input value={search} onChange={e => setSearch(e.target.value)} placeholder={tl.searchPh}
-                    className="pl-9 pr-8 py-2.5 bg-white/[0.03] border border-white/8 rounded-xl text-sm font-light text-white placeholder-white/20 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors w-56"
+                    className="pl-9 pr-8 py-2.5 bg-white/3 border border-white/8 rounded-xl text-sm font-light text-white placeholder-white/20 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors w-56"
                   />
                   {search && (
                     <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60">
@@ -581,12 +588,12 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
 
                 {/* Sort */}
                 <select value={sortBy} onChange={e => setSortBy(e.target.value as SortBy)}
-                  className="px-3.5 py-2.5 bg-white/[0.03] border border-white/8 rounded-xl text-xs font-light text-white/50 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors appearance-none cursor-pointer">
+                  className="px-3.5 py-2.5 bg-white/3 border border-white/8 rounded-xl text-xs font-light text-white/50 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors appearance-none cursor-pointer">
                   {tl.sorts.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
                 </select>
 
                 {/* View toggle */}
-                <div className="flex items-center p-1 rounded-xl border border-white/8 bg-white/[0.02]">
+                <div className="flex items-center p-1 rounded-xl border border-white/8 bg-white/2">
                   {([['grid', FiGrid], ['list', FiList]] as const).map(([mode, Icon]) => (
                     <button key={mode} onClick={() => setViewMode(mode)}
                       className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
@@ -638,7 +645,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
             {filtered.length === 0 ? (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="text-center py-24">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-white/3 border border-white/8 flex items-center justify-center">
                   <FiFilter size={20} className="text-white/20" />
                 </div>
                 <h3 className="text-xl font-extralight text-white mb-2">{tl.empty}</h3>
@@ -704,7 +711,7 @@ const TemplatesSection: React.FC<{ language?: Language; onTemplateSelect?: (t: T
                   { val: '10K+', lbl: tl.statsTemplates },
                   { val: '98%',  lbl: tl.statsSatisfaction },
                 ].map((s, i) => (
-                  <div key={i} className="bg-white/[0.02] px-4 py-5 text-center">
+                  <div key={i} className="bg-white/2 px-4 py-5 text-center">
                     <div className="text-2xl font-extralight text-white mb-1">{s.val}</div>
                     <div className="text-[10px] text-[#484f68] uppercase tracking-widest font-light">{s.lbl}</div>
                   </div>

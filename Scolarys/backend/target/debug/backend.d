@@ -1,0 +1,1 @@
+C:\Users\Baptiste\ Ngapi\Documents\BlueNumericProjets\Scolarys\ (\ Site\ Web\ )\Scolarys\backend\target\debug\backend.exe: C:\Users\Baptiste\ Ngapi\Documents\BlueNumericProjets\Scolarys\ (\ Site\ Web\ )\Scolarys\backend\src\main.rs

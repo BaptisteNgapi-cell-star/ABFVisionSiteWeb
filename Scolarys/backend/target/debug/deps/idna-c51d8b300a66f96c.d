@@ -1,0 +1,10 @@
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\idna-c51d8b300a66f96c.d: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\lib.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\punycode.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46_mapping_table.rs
+
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\libidna-c51d8b300a66f96c.rlib: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\lib.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\punycode.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46_mapping_table.rs
+
+C:\Users\Baptiste Ngapi\Documents\BlueNumericProjets\Scolarys ( Site Web )\Scolarys\backend\target\debug\deps\libidna-c51d8b300a66f96c.rmeta: C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\lib.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\punycode.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46.rs C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46_mapping_table.rs
+
+C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\lib.rs:
+C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\punycode.rs:
+C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46.rs:
+C:\Users\Baptiste\ Ngapi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\idna-0.4.0\src\uts46_mapping_table.rs:

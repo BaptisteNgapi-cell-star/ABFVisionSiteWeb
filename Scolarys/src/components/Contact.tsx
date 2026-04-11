@@ -137,7 +137,7 @@ const Field: React.FC<{
   </div>
 );
 
-const inputCls = "w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3 text-sm font-extralight text-white placeholder-white/15 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors duration-200";
+const inputCls = "w-full bg-white/3 border border-white/8 rounded-xl px-4 py-3 text-sm font-extralight text-white placeholder-white/15 focus:outline-none focus:border-[#9AAEFF]/40 transition-colors duration-200";
 
 // ─── COORD ROW ─────────────────────────────────────────────────────────────────
 const CoordRow: React.FC<{
@@ -199,7 +199,7 @@ const ContactSection: React.FC<{ language?: 'fr' | 'en'; onNavigate?: (s: string
             style={{ background: 'radial-gradient(circle, rgba(154,174,255,0.04) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
           <svg className="absolute inset-0 w-full h-full opacity-[0.025]" xmlns="http://www.w3.org/2000/svg">
             <defs><pattern id="cg" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
             </pattern></defs>
             <rect width="100%" height="100%" fill="url(#cg)" />
           </svg>
@@ -227,9 +227,9 @@ const ContactSection: React.FC<{ language?: 'fr' | 'en'; onNavigate?: (s: string
               <div className="grid grid-cols-2 gap-px border border-white/5 rounded-xl overflow-hidden">
                 {[
                   { val: '< 24h', lbl: t.statsReply },
-                  { val: '98%',   lbl: t.statsSat },
+                  { val: '98%', lbl: t.statsSat },
                 ].map((s, i) => (
-                  <div key={i} className="bg-white/[0.02] px-6 py-4 text-center">
+                  <div key={i} className="bg-white/2 px-6 py-4 text-center">
                     <div className="text-2xl font-extralight text-white">{s.val}</div>
                     <div className="text-[10px] text-[#484f68] uppercase tracking-widest font-light mt-0.5">{s.lbl}</div>
                   </div>
@@ -273,8 +273,8 @@ const ContactSection: React.FC<{ language?: 'fr' | 'en'; onNavigate?: (s: string
             </AnimatePresence>
 
             <Reveal delay={0.07}>
-              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/[0.01]">
-                <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, #9AAEFF, transparent)' }} />
+              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/1">
+                <div className="h-0.5" style={{ background: 'linear-gradient(90deg, #9AAEFF, transparent)' }} />
                 <form onSubmit={onSubmit} className="p-8">
                   <div className="grid sm:grid-cols-2 gap-5 mb-5">
                     <Field label={t.labelName} required>
@@ -345,22 +345,22 @@ const ContactSection: React.FC<{ language?: 'fr' | 'en'; onNavigate?: (s: string
           <div className="lg:col-span-5">
             <Reveal delay={0.1}>
               <SectionLabel>{t.coordTitle}</SectionLabel>
-              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/[0.01] mb-5">
-                <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, #34D399, transparent)' }} />
+              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/1 mb-5">
+                <div className="h-0.5" style={{ background: 'linear-gradient(90deg, #34D399, transparent)' }} />
                 <div className="px-7 py-5">
-                  <CoordRow icon={FiMail}   label={t.labelEmailCoord} value={CONTACT.email}                    href={`mailto:${CONTACT.email}`} />
-                  <CoordRow icon={FiPhone}  label={t.labelPhone}      value={CONTACT.phone}                    href={`tel:${CONTACT.phone}`} />
-                  <CoordRow icon={FiMapPin} label={t.labelAddress}    value={CONTACT.address[language]} />
-                  <CoordRow icon={FiGlobe}  label={t.labelSite}       value={CONTACT.website}                  href={`https://${CONTACT.website}`} />
-                  <CoordRow icon={FiClock}  label={t.labelHours}      value={CONTACT.availability[language]} />
+                  <CoordRow icon={FiMail} label={t.labelEmailCoord} value={CONTACT.email} href={`mailto:${CONTACT.email}`} />
+                  <CoordRow icon={FiPhone} label={t.labelPhone} value={CONTACT.phone} href={`tel:${CONTACT.phone}`} />
+                  <CoordRow icon={FiMapPin} label={t.labelAddress} value={CONTACT.address[language]} />
+                  <CoordRow icon={FiGlobe} label={t.labelSite} value={CONTACT.website} href={`https://${CONTACT.website}`} />
+                  <CoordRow icon={FiClock} label={t.labelHours} value={CONTACT.availability[language]} />
                 </div>
               </div>
             </Reveal>
 
             {/* Location card */}
             <Reveal delay={0.18}>
-              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/[0.01]">
-                <div className="h-[2px]" style={{ background: 'linear-gradient(90deg, #C084FC, transparent)' }} />
+              <div className="rounded-2xl border border-white/5 overflow-hidden bg-white/1">
+                <div className="h-0.5" style={{ background: 'linear-gradient(90deg, #C084FC, transparent)' }} />
                 <div className="p-6 text-center">
                   <motion.div animate={{ scale: [1, 1.04, 1] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
                     className="w-12 h-12 flex items-center justify-center rounded-2xl mx-auto mb-4 bg-[#C084FC]/12 border border-[#C084FC]/20">
@@ -369,10 +369,10 @@ const ContactSection: React.FC<{ language?: 'fr' | 'en'; onNavigate?: (s: string
                   <h3 className="text-base font-extralight text-white mb-1">{t.basedIn}</h3>
                   <p className="text-xs text-white/25 font-light mb-5">{t.basedSub}</p>
                   {/* Map placeholder */}
-                  <div className="h-28 rounded-xl border border-white/5 bg-white/[0.015] flex items-center justify-center relative overflow-hidden">
+                  <div className="h-28 rounded-xl border border-white/5 bg-white/1.5 flex items-center justify-center relative overflow-hidden">
                     <svg className="absolute inset-0 w-full h-full opacity-[0.04]">
                       <defs><pattern id="mgrid" width="24" height="24" patternUnits="userSpaceOnUse">
-                        <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+                        <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
                       </pattern></defs>
                       <rect width="100%" height="100%" fill="url(#mgrid)" />
                     </svg>

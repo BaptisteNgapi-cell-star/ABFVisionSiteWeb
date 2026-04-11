@@ -28,7 +28,7 @@ const getSolutions = (lang: 'fr' | 'en') => [
     features: lang === 'fr'
       ? ['Gestion administrative centralisée', 'Suivi pédagogique avancé', 'Communication unifiée', 'Rapports et analytics']
       : ['Centralized administrative management', 'Advanced pedagogical monitoring', 'Unified communication', 'Reports and analytics'],
-    kpi: [{ val: '+40%', lbl: lang === 'fr' ? 'Efficacité' : 'Efficiency' }, { val: '−60%', lbl: lang === 'fr' ? 'Admin' : 'Admin Time' }],
+    kpi: [{ val: '+40%', lbl: lang === 'fr' ? 'Efficacité' : 'Efficiency' }, { val: '-60%', lbl: lang === 'fr' ? 'Admin' : 'Admin Time' }],
     accent: '#9AAEFF',
     num: 0,
   },
@@ -43,7 +43,7 @@ const getSolutions = (lang: 'fr' | 'en') => [
     features: lang === 'fr'
       ? ['Gestion des emplois du temps', 'Saisie et analyse des notes', 'Communication avec les familles', 'Ressources pédagogiques']
       : ['Schedule management', 'Grade entry and analysis', 'Communication with families', 'Educational resources'],
-    kpi: [{ val: '+50%', lbl: lang === 'fr' ? 'Productivité' : 'Productivity' }, { val: '−70%', lbl: lang === 'fr' ? 'Répétitif' : 'Repetitive' }],
+    kpi: [{ val: '+50%', lbl: lang === 'fr' ? 'Productivité' : 'Productivity' }, { val: '-70%', lbl: lang === 'fr' ? 'Répétitif' : 'Repetitive' }],
     accent: '#34D399',
     num: 1,
   },
@@ -82,7 +82,7 @@ const globalStats = (lang: 'fr' | 'en') => [
   { value: '150+', label: lang === 'fr' ? 'Établissements' : 'Institutions' },
   { value: '50K+', label: lang === 'fr' ? 'Utilisateurs' : 'Users' },
   { value: '10K+', label: lang === 'fr' ? 'Téléchargements' : 'Downloads' },
-  { value: '98%',  label: lang === 'fr' ? 'Satisfaction' : 'Satisfaction' },
+  { value: '98%', label: lang === 'fr' ? 'Satisfaction' : 'Satisfaction' },
 ];
 
 // ─── FADE IN WRAPPER ──────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ const MainSolutionsContent: React.FC<{
           <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-                <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5"/>
+                <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#9AAEFF" strokeWidth="0.5" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
@@ -155,8 +155,8 @@ const MainSolutionsContent: React.FC<{
             <Reveal delay={0.25} className="lg:pb-2">
               <p className="text-[#98A2B3] text-lg font-light leading-relaxed max-w-md">
                 {language === 'fr'
-                  ? 'ABFVision conçoit des outils qui s\'effacent pour laisser place à l\'essentiel — enseigner, apprendre, connecter.'
-                  : 'ABFVision designs tools that fade into the background, leaving room for what matters — teaching, learning, connecting.'}
+                  ? 'Scolarys conçoit des outils qui s\'effacent pour laisser place à l\'essentiel — enseigner, apprendre, connecter.'
+                  : 'Scolarys designs tools that fade into the background, leaving room for what matters — teaching, learning, connecting.'}
               </p>
               <motion.button
                 whileHover={{ x: 6 }}
@@ -175,7 +175,7 @@ const MainSolutionsContent: React.FC<{
           <Reveal delay={0.4}>
             <div className="grid grid-cols-4 gap-px mt-20 border border-white/5 rounded-xl overflow-hidden">
               {stats.map((s, i) => (
-                <div key={i} className="bg-white/[0.02] px-6 py-5 text-center hover:bg-white/[0.04] transition-colors">
+                <div key={i} className="bg-white/2 px-6 py-5 text-center hover:bg-white/4 transition-colors">
                   <div className="text-2xl sm:text-3xl font-extralight text-white mb-1">{s.value}</div>
                   <div className="text-xs text-[#484f68] font-light uppercase tracking-widest">{s.label}</div>
                 </div>
@@ -190,7 +190,6 @@ const MainSolutionsContent: React.FC<{
         {solutions.map((sol, idx) => {
           const Icon = sol.icon;
           const isHovered = hoveredSolution === idx;
-          const isOdd = idx % 2 !== 0;
 
           return (
             <motion.article
@@ -203,14 +202,14 @@ const MainSolutionsContent: React.FC<{
             >
               {/* Accent bar left */}
               <motion.div
-                className="absolute left-0 top-0 bottom-0 w-[2px]"
+                className="absolute left-0 top-0 bottom-0 w-0.5"
                 animate={{ scaleY: isHovered ? 1 : 0, opacity: isHovered ? 1 : 0 }}
                 style={{ background: sol.accent, originY: 0 }}
                 transition={{ duration: 0.35 }}
               />
 
               <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
-                <div className={`grid lg:grid-cols-12 gap-10 items-center ${isOdd ? '' : ''}`}>
+                <div className="grid lg:grid-cols-12 gap-10 items-center">
 
                   {/* Number + Icon col */}
                   <Reveal delay={0.05 * idx} className="lg:col-span-1 flex lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
@@ -318,7 +317,7 @@ const MainSolutionsContent: React.FC<{
                   >
                     {/* Top accent line on hover */}
                     <motion.div
-                      className="absolute top-0 left-0 right-0 h-[1px]"
+                      className="absolute top-0 left-0 right-0 h-px"
                       style={{ background: tool.accent }}
                       initial={{ scaleX: 0, opacity: 0 }}
                       whileHover={{ scaleX: 1, opacity: 1 }}
@@ -403,8 +402,8 @@ const MainSolutionsContent: React.FC<{
               </h2>
               <p className="text-[#98A2B3] font-light mb-10 text-lg">
                 {language === 'fr'
-                  ? 'Rejoignez les 150+ établissements qui font confiance à ABFVision.'
-                  : 'Join 150+ institutions that trust ABFVision.'}
+                  ? 'Rejoignez les 150+ établissements qui font confiance à Scolarys.'
+                  : 'Join 150+ institutions that trust Scolarys.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
